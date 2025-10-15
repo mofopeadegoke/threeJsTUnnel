@@ -23,7 +23,7 @@ controls.dampingFactor = 0.03;
 
 // create tube geometry from spline
 const geometry = new THREE.TubeGeometry(spline, 222, 0.65, 16, true);
-const material = new THREE.MeshStandardMaterial({
+const material = new THREE.MeshBasicMaterial({
     color: 0xffffff,
     side: THREE.DoubleSide,
     wireframe: true
@@ -32,8 +32,8 @@ const taurMesh = new THREE.Mesh(geometry, material);
 
 //update camera inside the path of the tube
 function updateCamera(t) {
-    const time = t * 0.05;
-    const looptime = 10 * 1000;
+    const time = t * 0.1;
+    const looptime = 8 * 1000;
     const t1 = (time % looptime) / looptime;
 
     const pos = geometry.parameters.path.getPointAt(t1);
@@ -43,9 +43,8 @@ function updateCamera(t) {
     camera.lookAt(lookAt);
 }
 
-const hemi = new THREE.HemisphereLight(0x0099ff, 0xD4AF37);
-scene.add(hemi);
 scene.add(taurMesh);
+scene.fog = new THREE.FogExp2(0x000000, 0.3);
 
 function animate(t = 0) {
     requestAnimationFrame(animate)
