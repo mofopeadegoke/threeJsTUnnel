@@ -30,9 +30,41 @@ const material = new THREE.MeshBasicMaterial({
 });
 const taurMesh = new THREE.Mesh(geometry, material);
 
+// create edge geometry from spline
+const edge = new THREE.EdgesGeometry(geometry, 0.2);
+const line = new THREE.LineSegments(
+    edge,
+    new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 })
+);
+scene.add(line);
+
+// Create boxes along the path of the tube wihh a slight offset
+const numBoxes = 100;
+const size = 0.08;
+const boxGeometry = new THREE.BoxGeometry(size, size, size);
+for (let i = 0; i < numBoxes; i++) {
+    const boxMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
+    const box = new THREE.Mesh(boxGeometry, boxMaterial);
+    const p = (i / numBoxes + Math.random() * 0.1) % 1;
+
+    const pos = geometry.parameters.path.getPointAt(p);
+    pos.x += Math.random() - 0.5;
+    pos.z += Math.random() - 0.5;
+    box.position.copy(pos);
+    const route = new THREE.Vector3(
+        Math.random() * Math.PI,
+        Math.random() * Math.PI,
+        Math.random() * Math.PI
+    ).normalize();
+    box.rotation.set(route.x, route.y, route.z);
+    const helper = new THREE.BoxHelper(box, 0xffffff);
+    scene.add(helper);
+    scene.add(box);
+}
+
 //update camera inside the path of the tube
 function updateCamera(t) {
-    const time = t * 0.1;
+    const time = t * 0.05;
     const looptime = 8 * 1000;
     const t1 = (time % looptime) / looptime;
 
