@@ -28,7 +28,7 @@ controls.dampingFactor = 0.03;
 const renderScene = new RenderPass(scene, camera);
 const bloomPass = new UnrealBloomPass(new THREE.Vector2(w, h), 1.5, 0.4, 100);
 bloomPass.threshold = 0.002;
-bloomPass.strength = 1;
+bloomPass.strength = 2;
 bloomPass.radius = 0;
 const composer = new EffectComposer(renderer);
 composer.addPass(renderScene);
@@ -47,7 +47,7 @@ const taurMesh = new THREE.Mesh(geometry, material);
 const edge = new THREE.EdgesGeometry(geometry, 0.2);
 const line = new THREE.LineSegments(
     edge,
-    new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 })
+    new THREE.LineBasicMaterial({ color: 0xADD8E6, linewidth: 2 })
 );
 scene.add(line);
 
@@ -71,9 +71,10 @@ for (let i = 0; i < numBoxes; i++) {
     ).normalize();
     box.rotation.set(route.x, route.y, route.z);
     const edge = new THREE.EdgesGeometry(boxGeometry, 0.2);
+    const color = new THREE.Color().setHSL(1.0 - p, 1, 0.5);
     const boxLine = new THREE.LineSegments(
         edge,
-        new THREE.LineBasicMaterial({ color: 0xffff00, linewidth: 2 })
+        new THREE.LineBasicMaterial({ color: color , linewidth: 2 })
     );
     boxLine.position.copy(pos);
     boxLine.rotation.set(route.x, route.y, route.z);
