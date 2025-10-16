@@ -71,10 +71,10 @@ for (let i = 0; i < numBoxes; i++) {
     ).normalize();
     box.rotation.set(route.x, route.y, route.z);
     const edge = new THREE.EdgesGeometry(boxGeometry, 0.2);
-    const color = new THREE.Color().setHSL(1.0 - p, 1, 0.5);
+    // const color = new THREE.Color().setHSL(1.0 - p, 1, 0.5);
     const boxLine = new THREE.LineSegments(
         edge,
-        new THREE.LineBasicMaterial({ color: color , linewidth: 2 })
+        new THREE.LineBasicMaterial({ color:0xFFD700, linewidth: 2 })
     );
     boxLine.position.copy(pos);
     boxLine.rotation.set(route.x, route.y, route.z);
