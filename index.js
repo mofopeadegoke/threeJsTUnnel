@@ -57,9 +57,14 @@ for (let i = 0; i < numBoxes; i++) {
         Math.random() * Math.PI
     ).normalize();
     box.rotation.set(route.x, route.y, route.z);
-    const helper = new THREE.BoxHelper(box, 0xffffff);
-    scene.add(helper);
-    scene.add(box);
+    const edge = new THREE.EdgesGeometry(boxGeometry, 0.2);
+    const boxLine = new THREE.LineSegments(
+        edge,
+        new THREE.LineBasicMaterial({ color: 0xffff00, linewidth: 2 })
+    );
+    boxLine.position.copy(pos);
+    boxLine.rotation.set(route.x, route.y, route.z);
+    scene.add(boxLine);
 }
 
 //update camera inside the path of the tube
