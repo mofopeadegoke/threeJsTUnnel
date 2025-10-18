@@ -82,12 +82,25 @@ for (let i = 0; i < numBoxes; i++) {
 }
 
 
+// Track scroll for infinite movement
+let scrollOffset = 0;
+let targetScrollOffset = 0; // Target position
+let currentScrollOffset = 0; // Current position (smoothed)
 
 //update camera inside the path of the tube
-function updateCamera(t) {
-    const time = t * 0.1;
+function updateCamera() {
     const looptime = 8 * 1000;
-    const t1 = (time % looptime) / looptime;
+    
+    // Smoothly interpolate towards target (lerp)
+    currentScrollOffset += (targetScrollOffset - currentScrollOffset) * 0.01; // 0.1 = smoothing factor
+    
+    // Use smoothed scrollOffset
+    const time = currentScrollOffset * looptime;
+    let t1 = (time % looptime) / looptime;
+    
+    // Ensure t1 stays between 0 and 1
+    t1 = t1 % 1;
+    if (t1 < 0) t1 += 1;
 
     const pos = geometry.parameters.path.getPointAt(t1);
     const lookAt = geometry.parameters.path.getPointAt((t1 + 0.01) % 1);
@@ -96,20 +109,26 @@ function updateCamera(t) {
     camera.lookAt(lookAt);
 }
 
+// Use wheel event instead of scroll event
+window.addEventListener('wheel', (e) => {
+    e.preventDefault(); // Prevent actual scrolling
+    
+    // Update target offset (adjust 0.0001 for speed)
+    targetScrollOffset += e.deltaY * 0.0001;
+}, { passive: false });
+
 scene.add(taurMesh);
 scene.fog = new THREE.FogExp2(0x000000, 0.3);
 
 function animate(t = 0) {
     requestAnimationFrame(animate)
-    updateCamera(t);
-    // mesh.rotation.y = t * 0.0001;
+    updateCamera(); // Now updates every frame with smooth interpolation
     composer.render(scene, camera);
     controls.update();
 }
 
-
 animate();
 
-
-
+// Prevent scrolling via CSS
+document.body.style.overflow = 'hidden';
 
