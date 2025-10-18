@@ -81,6 +81,8 @@ for (let i = 0; i < numBoxes; i++) {
     scene.add(boxLine);
 }
 
+
+
 //update camera inside the path of the tube
 function updateCamera(t) {
     const time = t * 0.1;
